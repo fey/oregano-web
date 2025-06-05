@@ -7,6 +7,12 @@ run = "npm run dev"
 [tasks."start:backend"]
 run = "php artisan serve"
 
+[tasks.check]
+run = [
+    "mise run test",
+    "mise run lint",
+]
+
 [tasks.test]
 run = "composer exec --verbose phpunit"
 
