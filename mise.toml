@@ -45,6 +45,7 @@ run = "npm run build"
 
 [tasks."prepare:env"]
 run = "cp .env.example .env --update=none"
+depends_post = "prepare:key"
 
 [tasks."prepare:key"]
 wait_for = "prepare:env"
