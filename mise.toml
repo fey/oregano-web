@@ -53,7 +53,8 @@ run = "php artisan key:generate"
 run = [
     "mise run prepare:env",
     "mise run prepare:key",
-    "mise run prepare:assets"
+    "mise run db:prepare",
+    "mise run prepare:assets",
 ]
 
 [tasks."db:prepare"]
@@ -80,11 +81,11 @@ run = [
     "rm -rf node_modules",
     "rm -rf build",
     "rm -rf .env",
-    "rm -rf database.sqlite",
+    "rm -rf database/database.sqlite",
 ]
 
 [tasks."clean-setup"]
-depends = ["clean"]
 run = [
-    "mise run setup"
+    "mise run clean",
+    "mise run setup",
 ]
