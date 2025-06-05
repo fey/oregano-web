@@ -11,10 +11,9 @@ run = "php artisan serve"
 run = "composer exec --verbose phpunit"
 
 [tasks.lint]
-env.MISE_JOBS = 1
-depends = [
-    "lint:php",
-    "lint:js"
+run = [
+    "mise run lint:php",
+    "mise run lint:js"
 ]
 
 [tasks."lint:php"]
@@ -26,15 +25,15 @@ quiet = true
 run = "npm run lint"
 
 [tasks.setup]
-depends = [
-    "install",
-    "prepare"
+run = [
+    "mise run install",
+    "mise run prepare"
 ]
 [tasks.install]
 depends = "install:*"
 
 [tasks."install:backend"]
-run = "composer install"
+run = "composer install --no-progress"
 
 [tasks."install:frontend"]
 run = "npm ci"
@@ -51,10 +50,10 @@ wait_for = ["prepare:env", "install"]
 run = "php artisan key:generate"
 
 [tasks.prepare]
-wait_for = "install"
-depends = [
-    "prepare:env",
-    "prepare:key"
+run = [
+    "mise run prepare:env",
+    "mise run prepare:key",
+    "mise run prepare:assets"
 ]
 
 [tasks."db:seed"]
@@ -66,5 +65,13 @@ run = "php artisan db:migrate"
 [tasks."clean"]
 run = [
     "rm -rf vendor",
-    "rm -rf node_modules"
+    "rm -rf node_modules",
+    "rm -rf build",
+    "rm -rf .env",
+]
+
+[tasks."clean-setup"]
+depends = ["clean"]
+run = [
+    "mise run setup"
 ]
