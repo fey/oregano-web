@@ -32,14 +32,14 @@ run = [
 [tasks.install]
 depends = "install:*"
 
-[tasks."install:backend"]
+[tasks."install:php"]
 run = "composer install --no-progress"
 
-[tasks."install:frontend"]
+[tasks."install:js"]
 run = "npm ci"
 
 [tasks."prepare:assets"]
-wait_for = "install:frontend"
+wait_for = "install:js"
 run = "npm run build"
 
 [tasks."prepare:env"]
@@ -56,11 +56,23 @@ run = [
     "mise run prepare:assets"
 ]
 
+[tasks."db:prepare"]
+run = [
+    "mise run db:create",
+    "mise run db:migrate",
+    "mise run db:seed"
+]
+
+[tasks."db:create"]
+run = [
+    "touch database/database.sqlite"
+]
+
 [tasks."db:seed"]
 run = "php artisan db:seed"
 
 [tasks."db:migrate"]
-run = "php artisan db:migrate"
+run = "php artisan migrate"
 
 [tasks."clean"]
 run = [
@@ -68,6 +80,7 @@ run = [
     "rm -rf node_modules",
     "rm -rf build",
     "rm -rf .env",
+    "rm -rf database.sqlite",
 ]
 
 [tasks."clean-setup"]
