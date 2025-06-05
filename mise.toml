@@ -28,7 +28,7 @@ run = "npm run lint"
 [tasks.setup]
 depends = [
     "install",
-    "prepare:*"
+    "prepare"
 ]
 [tasks.install]
 depends = "install:*"
@@ -45,8 +45,26 @@ run = "npm run build"
 
 [tasks."prepare:env"]
 run = "cp .env.example .env --update=none"
-depends_post = "prepare:key"
 
 [tasks."prepare:key"]
-wait_for = "prepare:env"
+wait_for = ["prepare:env", "install"]
 run = "php artisan key:generate"
+
+[tasks.prepare]
+wait_for = "install"
+depends = [
+    "prepare:env",
+    "prepare:key"
+]
+
+[tasks."db:seed"]
+run = "php artisan db:seed"
+
+[tasks."db:migrate"]
+run = "php artisan db:migrate"
+
+[tasks."clean"]
+run = [
+    "rm -rf vendor",
+    "rm -rf node_modules"
+]

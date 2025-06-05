@@ -26,7 +26,6 @@ jobs:
         with:
           php-version: '8.4'
 
-      - run: mise run install
-      - run: mise run prepare:env
+      - run: mise run setup
       - run: mise run test
       - run: mise run lint
