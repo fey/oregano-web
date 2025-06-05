@@ -1,0 +1,51 @@
+
+[tasks.start]
+depends = "start:*"
+[tasks."start:frontend"]
+run = "npm run dev"
+
+[tasks."start:backend"]
+run = "php artisan serve"
+
+[tasks.test]
+run = "composer exec --verbose phpunit"
+
+[tasks.lint]
+env.MISE_JOBS = 1
+depends = [
+    "lint:php",
+    "lint:js"
+]
+
+[tasks."lint:php"]
+quiet = true
+run = "composer exec --verbose pint"
+
+[tasks."lint:js"]
+quiet = true
+run = "npm run lint"
+
+[tasks.setup]
+depends = [
+    "install",
+    "prepare:*"
+]
+[tasks.install]
+depends = "install:*"
+
+[tasks."install:backend"]
+run = "composer install"
+
+[tasks."install:frontend"]
+run = "npm ci"
+
+[tasks."prepare:assets"]
+wait_for = "install:frontend"
+run = "npm run build"
+
+[tasks."prepare:env"]
+run = "cp .env.example .env --update=none"
+
+[tasks."prepare:key"]
+wait_for = "prepare:env"
+run = "php artisan key:generate"
